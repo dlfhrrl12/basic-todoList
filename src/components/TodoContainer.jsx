@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TodoForm } from "./TodoForm";
 import TodoList from "./TodoList";
+import TodoDashBoard from "./TodoDashBoard";
 
 const SAMPLE_TODOS = [
   { id: 1, text: "Buy milk" },
@@ -52,6 +53,7 @@ export const TodoContainer = () => {
     return (
         <>
             <div className="">
+              <TodoDashBoard />
                <TodoForm handleSubmit={handleSubmit} todoText={todoText} handleChangeTodoText={handleChange}/>
                <TodoList todos={todos} handleToggleCompleted={handleToggleCompleted} handleDelete={handleDelete}/>
             </div>
