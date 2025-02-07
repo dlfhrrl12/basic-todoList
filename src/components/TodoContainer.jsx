@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TodoForm } from "./TodoForm";
 import TodoList from "./TodoList";
 import TodoDashBoard from "./TodoDashBoard";
+import styled from "styled-components";
 
 const SAMPLE_TODOS = [
   { id: 1, text: "Buy milk" },
@@ -16,7 +17,7 @@ const SAMPLE_TODOS = [
   { id: 10, text: "Write code" },
 ];
 
-export const TodoContainer = () => {
+const TodoContainer = () => {
    const [todos, setTodos] = useState(SAMPLE_TODOS);
   const [todoText, setTodoText] = useState('123');
 
@@ -52,11 +53,19 @@ export const TodoContainer = () => {
   }
     return (
         <>
-            <div className="">
+            <TodoContainerWrapper>
               <TodoDashBoard />
                <TodoForm handleSubmit={handleSubmit} todoText={todoText} handleChangeTodoText={handleChange}/>
                <TodoList todos={todos} handleToggleCompleted={handleToggleCompleted} handleDelete={handleDelete}/>
-            </div>
+            </TodoContainerWrapper>
         </>
     );
 }
+
+const TodoContainerWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+`
+
+export default TodoContainer;
