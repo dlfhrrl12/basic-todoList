@@ -1,5 +1,6 @@
 
-import { TodoItem } from './TodoItem';
+import styled from 'styled-components';
+import  TodoItem  from './TodoItem';
 
 
 
@@ -7,8 +8,9 @@ import { TodoItem } from './TodoItem';
 function TodoList({todos, handleToggleCompleted, handleDelete}) {
   
   return (
-      
-    <ul>
+    <TodoListSection> 
+      <TodoListHeader>Tasks</TodoListHeader> 
+    <TodoContent>
       {todos.map(({id, text, completed}) => (
          <TodoItem 
             key={id}
@@ -19,9 +21,25 @@ function TodoList({todos, handleToggleCompleted, handleDelete}) {
             id={id}
          />
       ))}
-    </ul>
-
+    </TodoContent>
+    </TodoListSection>
   )
 }
+const TodoListSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
+
+const TodoListHeader = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+`
+
+const TodoContent = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
 
 export default TodoList
