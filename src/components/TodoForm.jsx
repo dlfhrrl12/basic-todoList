@@ -15,6 +15,7 @@ const TodoForm = ({handleSubmit, todoText, handleChangeTodoText}) => {
 const TodoFormWrapper = styled.form`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 1rem;
 `
 
@@ -33,5 +34,6 @@ const TodoFormInput = styled.input`
         outline: none;
     }
 `
+
 
 export default TodoForm;

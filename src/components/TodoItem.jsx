@@ -17,6 +17,8 @@ const TodoItem = ({completed, text, handleToggleCompleted, handleDelete, id}) =>
 const TodoItemWrapper = styled.li`
   display: flex;
   flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
   background-color: white;
   padding: 1.25rem;
   border-radius: 1rem;
@@ -33,6 +35,7 @@ const TodoItemActions = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+  flex-wrap: wrap;
 `
 
 export const ActionButton = styled.button`
@@ -42,6 +45,8 @@ export const ActionButton = styled.button`
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  
+  word-break: keep-all;
   &:hover{
     opacity: 0.8;
   }
