@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { ActionButton } from "./TodoItem";
+import { ActionButton as SubmitButton } from "./TodoItem";
 
 const TodoForm = ({handleSubmit, todoText, handleChangeTodoText}) => {
     return (
         <>
             <TodoFormWrapper onSubmit={handleSubmit}>
                 <TodoFormInput type="text" value={todoText} onChange={handleChangeTodoText} placeholder="할 일을 입력하세요." />
-                <ActionButton type="submit">제출하기</ActionButton>
+                <SubmitButton type="submit" $bgColor="#582be6">제출하기</SubmitButton>
             </TodoFormWrapper>
         </>
     );
