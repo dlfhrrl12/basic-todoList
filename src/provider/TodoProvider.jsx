@@ -10,4 +10,4 @@ const TodoProvider = ({childern}) => {
     );
 }
 
-exort default TodoProvider;
+export default TodoProvider;
