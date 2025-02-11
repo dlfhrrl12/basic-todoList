@@ -14,28 +14,13 @@ const SAMPLE_TODOS = [
    { id: 10, text: "Write code" },
  ];
 
-const TodoProvider = ({childern}) => {
+const TodoProvider = ({children}) => {
    const [todos, setTodos] = useState(SAMPLE_TODOS);
-  const [todoText, setTodoText] = useState('123');
+  
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log('handleSubmit');
 
-    if(!todoText.trim()){
-      return;
-    }
 
-    // console.log("todoText :>> ", todoText, todoText.length);
 
-    setTodos([{id: crypto.randomUUID(), text: todoText}, ...todos]);
-
-    setTodoText('');
-  }
-
-  const handleChange = (e) => {
-    setTodoText(e.target.value)
-  }
   
   const handleDelete = (id) => {
     // todo.id가 내가 찾는 id와 같지 않을 때 true를 반환하여 그대로 남겨둠
@@ -52,10 +37,9 @@ const TodoProvider = ({childern}) => {
     return (
         <>
             <TodoContext.Provider value={{
-            todos, handleSubmit, handleToggleCompleted,
-            handleChange, handleDelete
+            todos, handleToggleCompleted, handleDelete, setTodos
             }}>
-               {childern}
+               {children}
             </TodoContext.Provider>
         </>
     );
