@@ -5,7 +5,7 @@ import  TodoItem  from './TodoItem';
 
 
 
-function TodoList({todos, handleToggleCompleted, handleDelete}) {
+function TodoList() {
   
   return (
     <TodoListSection> 
