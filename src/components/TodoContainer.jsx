@@ -2,7 +2,8 @@ import  TodoForm  from "./TodoForm";
 import TodoList from "./TodoList";
 import TodoDashBoard from "./TodoDashBoard";
 import styled from "styled-components";
-import TodoProvider from "../Provider/TodoProvider"
+import TodoProvider from "../provider/TodoProvider";
+
 
 
 
