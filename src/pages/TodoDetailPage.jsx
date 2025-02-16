@@ -1,13 +1,27 @@
 import { Link, useParams } from "react-router-dom";
-import { SAMPLE_TODOS } from "../constants/sample-todos";
 import TodoItem from "../components/TodoItem";
 import styled from "styled-components";
+import { useContext } from "react";
+import { TodoContext } from "../context/TodoContext";
 
 const TodoDetailPage = () => {
+  const { todos } = useContext(TodoContext);
    const { id } = useParams();
    
-   const targetTodoItem = SAMPLE_TODOS.find((todo) => todo.id === Number(id))
-  return (
+   
+   
+   const targetTodoItem = todos.find((todo) => todo.id === Number(id))
+  
+   if(!targetTodoItem){
+    return( 
+      <DetailPageWrapper>
+       <p>해당하는 데이터를 찾을 수 없습니다.</p>
+       <GoBackLink to={"/"}>뒤로가기</GoBackLink>
+      </DetailPageWrapper>
+    );
+   }
+   
+   return (
     <DetailPageWrapper>
       <TodoItem id={targetTodoItem.id} text={targetTodoItem.text} completed={targetTodoItem.completed} />
       <GoBackLink to={"/"}>뒤로가기</GoBackLink>
