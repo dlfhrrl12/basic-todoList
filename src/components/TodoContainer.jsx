@@ -2,7 +2,6 @@ import  TodoForm  from "./TodoForm";
 import TodoList from "./TodoList";
 import TodoDashBoard from "./TodoDashBoard";
 import styled from "styled-components";
-import TodoProvider from "../provider/TodoProvider";
 
 
 
@@ -10,14 +9,12 @@ import TodoProvider from "../provider/TodoProvider";
 
 const TodoContainer = () => {
   
-    return (
-        <TodoProvider>
+    return (  
             <TodoContainerWrapper>
               <TodoDashBoard />
                <TodoForm />
                <TodoList/>
             </TodoContainerWrapper>
-        </TodoProvider>
     );
 }
 
