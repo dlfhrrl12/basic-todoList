@@ -1,10 +1,11 @@
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 // Compositional Layout
-const RootLayout = ({ children }) => {
+const RootLayout = () => {
     return (
         <MainContainer>
-            <MainContent>{children}</MainContent>
+            <MainContent><Outlet /></MainContent>
         </MainContainer>
     );
 }

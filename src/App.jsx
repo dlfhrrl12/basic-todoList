@@ -1,4 +1,5 @@
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import  RootLayout  from './components/layout/RootLayout'
 import TodoContainer from './components/TodoContainer'
@@ -8,9 +9,13 @@ function App() {
 
 
   return (
-    <RootLayout>
-    <TodoContainer />
-    </RootLayout>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<RootLayout />}>
+          <Route index element={<TodoContainer />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
