@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import styled from "styled-components";
 import { TodoContext } from "../context/TodoContext";
+import { Link } from "react-router-dom";
 
 const TodoItem = ({completed, text, id}) => {
   const {handleToggleCompleted, handleDelete} =useContext(TodoContext);
   
     return (
       <TodoItemWrapper>
-      <TodoItemText $completed={completed} >{text}</TodoItemText>
+      <TodoItemLink to={`/todos/${id}`} $completed={completed} >{text}</TodoItemLink>
       <TodoItemActions>
       <ActionButton onClick={() => handleToggleCompleted(id)} $bgColor={completed ? "#242424" : "#582be6"}>
         {completed ? "취소하기" : "완료하기"}
@@ -31,8 +32,12 @@ const TodoItemWrapper = styled.li`
   align-items: center;
 `;
 
-const TodoItemText = styled.p`
+const TodoItemLink = styled(Link)`
   text-decoration: ${({$completed}) => ($completed ? "line-through" : "none")};
+  
+  &:hover{
+    text-decoration: underline;
+  }
 `
 
 const TodoItemActions = styled.div`
