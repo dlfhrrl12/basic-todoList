@@ -8,10 +8,10 @@ const TodoDetailPage = () => {
    
    const targetTodoItem = SAMPLE_TODOS.find((todo) => todo.id === Number(id))
   return (
-    <>
+    <DetailPageWrapper>
       <TodoItem id={targetTodoItem.id} text={targetTodoItem.text} completed={targetTodoItem.completed} />
       <GoBackLink to={"/"}>뒤로가기</GoBackLink>
-    </>  
+    </DetailPageWrapper>  
     );
 };
 
@@ -21,9 +21,16 @@ const GoBackLink = styled(Link)`
   background-color: #242424;
   color: white;
   text-decoration: none;
+  border-radius: 10px;
   font-weight: bold;
   text-align: center;
   font-size: 1.25rem;
+`
+
+const DetailPageWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `
 
 export default TodoDetailPage;
