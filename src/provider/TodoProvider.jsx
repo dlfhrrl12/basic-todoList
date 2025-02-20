@@ -1,48 +1,79 @@
-import { useState } from "react";
-import { TodoContext } from "../context/TodoContext";
-import { SAMPLE_TODOS } from "../constants/sample-todos";
+import { useEffect, useState } from 'react';
+import { TodoContext } from '../context/TodoContext';
+import { todoClient } from '../lib/todoClient';
 
+const TodoProvider = ({ children }) => {
+  const [todos, setTodos] = useState([]);
+  const [todoText, setTodoText] = useState('');
+  const getTodos = async () => {
+    const { data } = await todoClient.get('/');
 
+    setTodos(data);
+  };
+  const handleChange = (e) => {
+    setTodoText(e.target.value);
+  };
+  const handleDelete = async (id) => {
+    const { data } = await todoClient.delete(`/${id}`);
+    await getTodos();
 
-const TodoProvider = ({children}) => {
-     
-  const [todos, setTodos] = useState(SAMPLE_TODOS);
- 
- 
- const handleDelete = (id) => {
-   // todo.id가 내가 찾는 id와 같지 않을 때 true를 반환하여 그대로 남겨둠
-   setTodos((prev) => prev.filter((todo) => todo.id !== id));
- }
- const handleToggleCompleted = (id) => {
-   const updatedTodos = todos.map((todo) => {
-     return todo.id === id ? {...todo, completed: !todo.completed} : todo;
-   });
+    return data;
+  };
+  const handleToggleCompleted = async (id, currentCompleted) => {
+    const { data } = await todoClient.patch(`/${id}`, {
+      completed: !currentCompleted,
+    });
 
-   setTodos(updatedTodos);
- }
- 
- 
- const getFilteredTodos = (selectedFilter) => {
-  if(selectedFilter === 'completed'){
-    return todos.filter((todo) => todo.completed);
-  }
-  
-  if(selectedFilter === 'pending'){
-    return todos.filter((todo) => !todo.completed);
-  }
-  
-  return todos;
-}
- 
-   return (
-       <>
-           <TodoContext.Provider value={{
-           todos, handleToggleCompleted, handleDelete, setTodos, getFilteredTodos,
-           }}>
-              {children}
-           </TodoContext.Provider>
-       </>
-   );
-}
+    await getTodos();
+
+    return data;
+  };
+
+  const handleSubmit = async (text) => {
+    const { data } = await todoClient.post('/', {
+      text,
+      completed: false,
+    });
+    setTodoText('');
+    await getTodos();
+
+    return data;
+  };
+
+  const getFilteredTodos = (selectedFilter) => {
+    if (selectedFilter === 'completed') {
+      return todos.filter((todo) => todo.completed);
+    }
+
+    if (selectedFilter === 'pending') {
+      return todos.filter((todo) => !todo.completed);
+    }
+
+    return todos;
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
+
+  return (
+    <>
+      <TodoContext.Provider
+        value={{
+          todos,
+          handleToggleCompleted,
+          handleDelete,
+          handleSubmit,
+          setTodos,
+          getFilteredTodos,
+          handleChange,
+          todoText,
+        }}
+      >
+        {children}
+      </TodoContext.Provider>
+    </>
+  );
+};
 
 export default TodoProvider;
