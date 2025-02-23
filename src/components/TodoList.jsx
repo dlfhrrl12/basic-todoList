@@ -1,21 +1,39 @@
 
 import styled from 'styled-components';
 import  TodoItem  from './TodoItem';
-import { useContext } from 'react';
-import { TodoContext } from '../context/TodoContext';
 import { useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { todoClient } from '../api/todo-api';
 
 
 
 
 function TodoList() {
-  const {getFilteredTodos} = useContext(TodoContext);
   const [searchParams] = useSearchParams();
-  
   const selectedFilter = searchParams.get('filter');
   
+  const  {data: todos = [], isLoading, isError} = useQuery({
+    queryKey: ['todos'],
+    queryFn: async () => {
+      const response = await todoClient.get('/');
+      return response.data
+    }
+  })
+
+  if(isLoading) return <p>로딩중...</p>
+  if(isError) return <p>Error loading todos</p>
   
-  
+  const getFilteredTodos = (filter) => {
+    switch (filter) {
+      case "completed":
+        return todos.filter((todo) => todo.completed);
+      case "pending":
+        return todos.filter((todo) => !todo.completed);
+      default:
+        return todos;
+    }
+  };
+
   const filteredTodos = getFilteredTodos(selectedFilter);
   
   return (

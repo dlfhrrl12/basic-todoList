@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import { ActionButton as SubmitButton } from './TodoItem';
-import { useContext } from 'react';
-import { TodoContext } from '../context/TodoContext';
+import { useState } from 'react';
+import { useAddTodo } from '../api/todo-api';
+
 
 const TodoForm = () => {
-  const { handleSubmit, handleChange, todoText } = useContext(TodoContext);
+  const [todoText, setTodoText] = useState('');
+  const addTodo = useAddTodo();
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!todoText.trim()) return;
-    handleSubmit(todoText);
+    addTodo.mutate(todoText, {
+      onSuccess: () => setTodoText('')
+    })
   };
   return (
     <>
@@ -16,7 +20,7 @@ const TodoForm = () => {
         <TodoFormInput
           type="text"
           value={todoText}
-          onChange={handleChange}
+          onChange={(e) => setTodoText(e.target.value)}
           placeholder="할 일을 입력하세요."
         />
         <SubmitButton type="submit" $bgColor="#582be6">

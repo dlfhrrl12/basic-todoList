@@ -1,18 +1,22 @@
 import { FileCheck, LaptopMinimal, Video } from "lucide-react";
-import { useContext } from "react";
 import styled from "styled-components";
-import { TodoContext } from "../context/TodoContext";
 import { Link, useSearchParams } from "react-router-dom";
+import { useTodos } from "../api/todo-api";
 
 const TodoDashBoard = () => {
-   const {getFilteredTodos} = useContext(TodoContext);
+   const {data: todos = [] } = useTodos();
    const [searchParams] = useSearchParams();
    const selectedFilter = searchParams.get('filter');
    // const all = todos.length;
    // const completed = todos.filter((todo) => todo.completed).length;
    // const pending = all - completed;
    
-   const all = getFilteredTodos().length;
+   const getFilteredTodos = (filter) => {
+      if(filter === 'completed') return todos.filter((todo) => todo.completed);
+      if(filter === 'pending') return todos.filter((todo) => !todo.completed);
+   }
+
+   const all = todos.length;
    const completed = getFilteredTodos('completed').length;
    const pending = all - completed;
    

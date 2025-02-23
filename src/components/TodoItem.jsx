@@ -1,15 +1,31 @@
-import { useContext } from 'react';
 import styled from 'styled-components';
-import { TodoContext } from '../context/TodoContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { todoClient } from '../api/todo-api';
 
 const TodoItem = ({ completed, text, id }) => {
-  const { handleToggleCompleted, handleDelete } = useContext(TodoContext);
   const navigate = useNavigate();
-  const navigateAfterDelete = (id) => {
-    handleDelete(id);
-    navigate('/');
-  };
+  const queryClient = useQueryClient();
+
+  const toggleCompletedMutation = useMutation({
+    mutationFn: async () => {
+      await todoClient.patch(`/${id}`, {completed: !completed});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos']);
+    }
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      await todoClient.delete(`/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos']);
+      navigate('/');
+    }
+  })
+
   return (
     <TodoItemWrapper>
       <TodoItemLink to={`/todos/${id}`} $completed={completed}>
@@ -17,13 +33,13 @@ const TodoItem = ({ completed, text, id }) => {
       </TodoItemLink>
       <TodoItemActions>
         <ActionButton
-          onClick={() => handleToggleCompleted(id, completed)}
+          onClick={() => toggleCompletedMutation.mutate()}
           $bgColor={completed ? '#242424' : '#582be6'}
         >
           {completed ? '취소하기' : '완료하기'}
         </ActionButton>
         <ActionButton
-          onClick={() => navigateAfterDelete(id)}
+          onClick={() => deleteMutation.mutate()}
           $bgColor="#e6582b"
         >
           삭제하기

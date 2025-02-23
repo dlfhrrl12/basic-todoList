@@ -4,23 +4,24 @@ import './App.css'
 import  RootLayout  from './components/layout/RootLayout'
 import HomePage from './pages/HomePage'
 import TodoDetailPage from './pages/TodoDetailPage'
-import TodoProvider from './provider/TodoProvider'
+// import TodoProvider from './provider/TodoProvider'
+import QueryProvider from './provider/QueryProvider'
 // import TodoList from './components/TodoList'
 
 function App() {
 
 
   return (
-    <TodoProvider>
     <BrowserRouter>
+    <QueryProvider>
       <Routes>
         <Route path='/' element={<RootLayout />}>
           <Route index element={<HomePage />} />
           <Route path='todos/:id' element={<TodoDetailPage />} />
         </Route>
       </Routes>
+    </QueryProvider>
     </BrowserRouter>
-    </TodoProvider>
   )
 }
 
