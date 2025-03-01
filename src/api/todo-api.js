@@ -1,63 +1,50 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 export const todoClient = axios.create({
-  baseURL: 'http://localhost:3000/todos',
+    baseURL: 'http://localhost:3000/todos',
 });
 
-export const useTodos = () => {
-    return useQuery({
-        queryKey: ['todos'],
-        queryFn: async () => {
-            const {data} = await todoClient.get('/');
-            return data;
-        }
-    })
+export const getTodos = async (filter) => {
+    const searchParams = new URLSearchParams();
+
+    if (filter === "completed") {
+        searchParams.append("completed", true);
+    }
+
+    if (filter === "pending") {
+        searchParams.append("completed", false)
+    }
+
+    const { data } = await todoClient.get(`?${searchParams.toString()}`);
+
+    return data;
 }
 
-export const useTodoItem = (id) => {
-    return useQuery({
-        queryKey: ['todo', id],
-        queryFn: async () => {
-            const {data} = await todoClient.get(`/${id}`);
-            return data;
-        }
-    })
+export const getTodoItem = async (id) => {
+    const { data } = await todoClient.get(`/${id}`);
+
+    return data;
 }
 
-export const useAddTodo = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: async (text) => {
-            const {data} = await todoClient.post('/', {text, completed: false});
-            return data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['todos'])
-        }
-    })
+export const addTodos = async (text) => {
+    const { data } = await todoClient.post("/", {
+        text,
+        completed: false,
+    });
+
+    return data;
 }
 
-export const useDeleteTodo = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: async (id) => {
-            await todoClient.delete(`/${id}`);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['todos'])
-        }
-    })
+export const toggleTodoCompleted = async (id, currentCompleted) => {
+    const { data } = await todoClient.patch(`/${id}`, {
+        completed: !currentCompleted,
+    });
+
+    return data;
 }
 
-export const useToggleCompleted = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: async ({id, currentCompleted}) => {
-            await todoClient.patch(`/${id}`, {completed: !currentCompleted})
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['todos']);
-        }
-    })
+export const deleteTodo = async (id) => {
+    const { data } = await todoClient.delete(`/${id}`);
+
+    return data;
 }

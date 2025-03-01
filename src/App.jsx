@@ -1,28 +1,34 @@
+import { BrowserRouter, Route, Routes } from "react-router";
+import RootLayout from "./components/layout/RootLayout";
+import HomePage from "./pages/HomePage";
+import TodoDetailPage from "./pages/TodoDetailPage";
+import QueryProvider from "./provider/QueryProvider";
+import { useThemeStore } from "./hooks/useThemeStore";
+import { useEffect } from "react";
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import  RootLayout  from './components/layout/RootLayout'
-import HomePage from './pages/HomePage'
-import TodoDetailPage from './pages/TodoDetailPage'
-// import TodoProvider from './provider/TodoProvider'
-import QueryProvider from './provider/QueryProvider'
-// import TodoList from './components/TodoList'
+const App = () => {
+  const { theme } = useThemeStore();
 
-function App() {
+  useEffect(() => {
+    const root = document.documentElement;
 
+    root.classList.remove("dark", "light");
+
+    root.classList.add(theme);
+  }, [theme]);
 
   return (
     <BrowserRouter>
-    <QueryProvider>
-      <Routes>
-        <Route path='/' element={<RootLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path='todos/:id' element={<TodoDetailPage />} />
-        </Route>
-      </Routes>
-    </QueryProvider>
+      <QueryProvider>
+        <Routes>
+          <Route path="/" element={<RootLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="todos/:id" element={<TodoDetailPage />} />
+          </Route>
+        </Routes>
+      </QueryProvider>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default App
+export default App;

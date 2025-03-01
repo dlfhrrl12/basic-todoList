@@ -1,56 +1,45 @@
-import { Link, useParams } from "react-router-dom";
-import TodoItem from "../components/TodoItem";
-import styled from "styled-components"
+import { Link, useParams } from "react-router";
+import TodoItem from "../components/todo/TodoItem";
 import { useQuery } from "@tanstack/react-query";
-import { todoClient } from "../api/todo-api";
-
+import { getTodoItem } from "../api/todo-api";
 
 const TodoDetailPage = () => {
-   const { id } = useParams();
-   
-const {data: targetTodoItem, isLoading, isError} = useQuery({
-  queryKey: ['todo', id],
-  queryFn: async () => {
-    const response = await todoClient.get(`/${id}`)
-    return response.data;
+  const { id } = useParams();
+  const {
+    data: todoItem,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["todos", id],
+    queryFn: () => getTodoItem(id),
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
-})
-   
-if(isLoading) return <p>로딩중...</p>
-if(isError || !targetTodoItem) return <p>해당 데이터를 찾을 수 없습니다.</p>
-   
-   return (
-    <DetailPageWrapper>
-         {targetTodoItem ? (
-        <TodoItem 
-          id={targetTodoItem.id}
-          text={targetTodoItem.text}
-          completed={targetTodoItem.completed}
+
+  if (error) {
+    return <div>Error fetching todo item - {error}</div>
+  }
+
+  return (
+    <section className="flex flex-col gap-4">
+      {todoItem ? (
+        <TodoItem
+          id={todoItem.id}
+          text={todoItem.text}
+          completed={todoItem.completed}
         />
       ) : (
-        <p>해당하는 데터ㄹ 찾을 수 없습니다.</p>
+        <p>해당하는 데이터를 찾을 수 없습니다.</p>
       )}
-      <GoBackLink to={"/"}>뒤로가기</GoBackLink>
-    </DetailPageWrapper>  
-    );
+
+      <Link to="/" className="flex-1">
+        <button className="w-full text-center bg-[#242424] text-white py-2 px-4 rounded-lg hover:opacity-80">돌아가기</button>
+      </Link>
+    </section>
+  );
 };
 
-const GoBackLink = styled(Link)`
-  display: block;
-  margin-top: 1rem;
-  background-color: #242424;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  font-weight: bold;
-  text-align: center;
-  font-size: 1.25rem;
-`
-
-const DetailPageWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`
 
 export default TodoDetailPage;
